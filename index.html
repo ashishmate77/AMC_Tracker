@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>AquaCare Pro – AMC & Service Management</title>
+  <meta name="description"
+    content="Water Purifier AMC Tracking & Service Management System for distributors and technicians." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif
+    }
+
+    .sidebar-link {
+      @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150;
+    }
+
+    .active-link {
+      background: rgba(99, 102, 241, .18);
+      color: #a5b4fc;
+    }
+
+    .card {
+      @apply bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5;
+    }
+
+    .badge {
+      @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .btn-primary {
+      @apply bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors;
+    }
+
+    .btn-ghost {
+      @apply border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors text-gray-600 dark:text-gray-300;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c7d2fe;
+      border-radius: 9px
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 h-full">
+
+  <!-- Modal Overlay -->
+  <div id="modalOverlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Add New Customer</h3>
+        <button onclick="closeModal()"
+          class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none">&times;</button>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2"><label class="block text-xs font-medium text-gray-500 mb-1">Full Name</label><input
+            type="text" placeholder="Rajesh Sharma"
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1">Phone</label><input type="text"
+            placeholder="+91 98765 43210"
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1">City</label><input type="text"
+            placeholder="Pune"
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1">Purifier Model</label>
+          <select
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option>Kent Grand+ RO</option>
+            <option>AquaGuard UV</option>
+            <option>Pureit UF Classic</option>
+            <option>Livpure Smart RO</option>
+          </select>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1">Purchase Date</label><input type="date"
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+        <div class="col-span-2"><label class="block text-xs font-medium text-gray-500 mb-1">Address</label><textarea
+            rows="2" placeholder="Flat 4B, Koregaon Park, Pune - 411001"
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+        </div>
+        <div><label class="block text-xs font-medium text-gray-500 mb-1">AMC Plan</label>
+          <select
+            class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option>Annual – ₹2,500</option>
+            <option>Bi-Annual – ₹4,500</option>
+            <option>No AMC</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-3 mt-5 justify-end">
+        <button onclick="closeModal()" class="btn-ghost">Cancel</button>
+        <button onclick="closeModal()" class="btn-primary">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside id="sidebar"
+      class="w-64 flex-shrink-0 bg-gray-900 dark:bg-gray-950 flex flex-col py-6 px-3 overflow-y-auto transition-all duration-200">
+      <div class="flex items-center gap-2.5 px-4 mb-8">
+        <div class="w-9 h-9 rounded-xl bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">A
+        </div>
+        <div>
+          <div class="text-white font-semibold text-sm leading-tight">AquaCare Pro</div>
+          <div class="text-gray-400 text-xs">Service Suite</div>
+        </div>
+      </div>
+      <nav class="flex flex-col gap-1 flex-1">
+        <button onclick="navigate('dashboard')" data-page="dashboard" class="sidebar-link active-link text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Dashboard
+        </button>
+        <button onclick="navigate('customers')" data-page="customers"
+          class="sidebar-link text-gray-400 hover:text-white text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Customers
+        </button>
+        <button onclick="navigate('amc')" data-page="amc" class="sidebar-link text-gray-400 hover:text-white text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          AMC &amp; Services
+        </button>
+        <button onclick="navigate('repairs')" data-page="repairs"
+          class="sidebar-link text-gray-400 hover:text-white text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Repair Requests
+        </button>
+        <button onclick="navigate('technicians')" data-page="technicians"
+          class="sidebar-link text-gray-400 hover:text-white text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          Technicians
+        </button>
+        <button onclick="navigate('notifications')" data-page="notifications"
+          class="sidebar-link text-gray-400 hover:text-white text-left">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          Notifications
+        </button>
+      </nav>
+      <div class="px-4 mt-4 pt-4 border-t border-gray-700">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+            SM</div>
+          <div>
+            <div class="text-white text-xs font-medium">Suresh Mehta</div>
+            <div class="text-gray-400 text-xs">Admin</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- TOPBAR -->
+      <header
+        class="h-16 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 flex items-center px-6 gap-4 flex-shrink-0">
+        <div class="flex-1 max-w-md relative">
+          <svg class="w-4 h-4 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" placeholder="Search customers, tickets…"
+            class="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+        <div class="ml-auto flex items-center gap-3">
+          <button onclick="toggleDark()"
+            class="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            title="Toggle dark mode">
+            <svg id="sunIcon" class="w-5 h-5 text-gray-500 dark:hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 6a6 6 0 100 12 6 6 0 000-12z" />
+            </svg>
+            <svg id="moonIcon" class="w-5 h-5 text-indigo-300 hidden dark:block" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+          <button class="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+          <div
+            class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold cursor-pointer">
+            SM</div>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <main class="flex-1 overflow-y-auto p-6">
+
+        <!-- DASHBOARD -->
+        <div id="page-dashboard" class="page-section space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+              <p class="text-sm text-gray-400 mt-0.5">Welcome back, Suresh. Here's what's happening today.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-ghost text-xs">📅 March 2026</button>
+              <button class="btn-primary text-xs" onclick="openModal()">+ Add Customer</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="card flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-2xl">
+                👥</div>
+              <div>
+                <div class="text-2xl font-bold text-gray-800 dark:text-white">248</div>
+                <div class="text-xs text-gray-400 mt-0.5">Total Customers</div>
+                <div class="text-xs text-green-500 font-medium mt-1">↑ 12 this month</div>
+              </div>
+            </div>
+            <div class="card flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 text-2xl">
+                ✅</div>
+              <div>
+                <div class="text-2xl font-bold text-gray-800 dark:text-white">186</div>
+                <div class="text-xs text-gray-400 mt-0.5">Active AMC</div>
+                <div class="text-xs text-green-500 font-medium mt-1">↑ 3 renewed</div>
+              </div>
+            </div>
+            <div class="card flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-yellow-50 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 text-2xl">
+                🔧</div>
+              <div>
+                <div class="text-2xl font-bold text-gray-800 dark:text-white">24</div>
+                <div class="text-xs text-gray-400 mt-0.5">Services Due</div>
+                <div class="text-xs text-red-500 font-medium mt-1">↑ 9 overdue</div>
+              </div>
+            </div>
+            <div class="card flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 text-2xl">
+                💰</div>
+              <div>
+                <div class="text-2xl font-bold text-gray-800 dark:text-white">₹1.8L</div>
+                <div class="text-xs text-gray-400 mt-0.5">Revenue (Mar)</div>
+                <div class="text-xs text-green-500 font-medium mt-1">↑ 8% vs last month</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts + Quick Actions -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="card lg:col-span-2">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="font-semibold text-gray-700 dark:text-gray-200">Monthly Revenue & Services</h2>
+                <span class="text-xs text-gray-400">Last 6 Months</span>
+              </div>
+              <canvas id="revenueChart" height="90"></canvas>
+            </div>
+            <div class="card">
+              <h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">AMC Status</h2>
+              <canvas id="amcChart" height="150"></canvas>
+              <div class="mt-4 space-y-2">
+                <div class="flex justify-between text-xs"><span class="flex items-center gap-1"><span
+                      class="w-2 h-2 rounded-full bg-indigo-500 inline-block"></span>Active</span><span
+                    class="font-semibold">186</span></div>
+                <div class="flex justify-between text-xs"><span class="flex items-center gap-1"><span
+                      class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>Expired</span><span
+                    class="font-semibold">38</span></div>
+                <div class="flex justify-between text-xs"><span class="flex items-center gap-1"><span
+                      class="w-2 h-2 rounded-full bg-gray-300 inline-block"></span>No AMC</span><span
+                    class="font-semibold">24</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tables -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="card">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="font-semibold text-gray-700 dark:text-gray-200">Upcoming Services</h2><button
+                  class="text-xs text-indigo-500 hover:underline">View All</button>
+              </div>
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                    <th class="text-left pb-2">Customer</th>
+                    <th class="text-left pb-2">Date</th>
+                    <th class="text-left pb-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="upcomingTable"></tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="font-semibold text-gray-700 dark:text-gray-200">Overdue Services</h2><span
+                  class="badge bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400">9 overdue</span>
+              </div>
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-xs text-gray-400 border-b border-gray-100 dark:border-gray-700">
+                    <th class="text-left pb-2">Customer</th>
+                    <th class="text-left pb-2">Due Date</th>
+                    <th class="text-left pb-2">Days Late</th>
+                  </tr>
+                </thead>
+                <tbody id="overdueTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Quick Actions</h2>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="openModal()" class="btn-primary flex items-center gap-2">➕ Add Customer</button>
+              <button onclick="navigate('amc')" class="btn-ghost flex items-center gap-2">📋 Schedule Service</button>
+              <button onclick="navigate('repairs')" class="btn-ghost flex items-center gap-2">🔧 New Repair
+                Ticket</button>
+              <button onclick="navigate('notifications')" class="btn-ghost flex items-center gap-2">📲 Send
+                Reminder</button>
+              <button onclick="navigate('technicians')" class="btn-ghost flex items-center gap-2">👷 Assign
+                Technician</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOMERS -->
+        <div id="page-customers" class="page-section hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Customer Management</h1>
+              <p class="text-sm text-gray-400 mt-0.5">Manage all registered customers and their AMC status.</p>
+            </div>
+            <button class="btn-primary" onclick="openModal()">+ Add Customer</button>
+          </div>
+          <div class="card overflow-hidden">
+            <div class="flex gap-3 mb-4">
+              <input type="text" placeholder="Search customers…"
+                class="flex-1 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <select
+                class="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm">
+                <option>All Status</option>
+                <option>Active AMC</option>
+                <option>Expired</option>
+                <option>No AMC</option>
+              </select>
+              <select
+                class="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm">
+                <option>All Cities</option>
+                <option>Pune</option>
+                <option>Mumbai</option>
+                <option>Nashik</option>
+              </select>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700/50">
+                    <th class="text-left px-4 py-3">Name</th>
+                    <th class="text-left px-4 py-3">Phone</th>
+                    <th class="text-left px-4 py-3">City</th>
+                    <th class="text-left px-4 py-3">Model</th>
+                    <th class="text-left px-4 py-3">Purchase Date</th>
+                    <th class="text-left px-4 py-3">AMC Status</th>
+                    <th class="text-left px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customerTable" class="divide-y divide-gray-50 dark:divide-gray-700"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- AMC & SERVICES -->
+        <div id="page-amc" class="page-section hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">AMC &amp; Service Tracking</h1>
+              <p class="text-sm text-gray-400 mt-0.5">Monitor all scheduled and completed service visits.</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="filterAMC('all')" id="filter-all" class="btn-primary text-xs">All</button>
+              <button onclick="filterAMC('week')" id="filter-week" class="btn-ghost text-xs">This Week</button>
+              <button onclick="filterAMC('month')" id="filter-month" class="btn-ghost text-xs">This Month</button>
+            </div>
+          </div>
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700/50">
+                    <th class="text-left px-4 py-3">Customer</th>
+                    <th class="text-left px-4 py-3">Phone</th>
+                    <th class="text-left px-4 py-3">Model</th>
+                    <th class="text-left px-4 py-3">Service Date</th>
+                    <th class="text-left px-4 py-3">Technician</th>
+                    <th class="text-left px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="amcTable" class="divide-y divide-gray-50 dark:divide-gray-700"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPAIRS -->
+        <div id="page-repairs" class="page-section hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Repair Requests</h1>
+              <p class="text-sm text-gray-400 mt-0.5">Track and manage all customer repair tickets.</p>
+            </div>
+            <button class="btn-primary text-sm">+ New Ticket</button>
+          </div>
+          <div id="repairTickets" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- TECHNICIANS -->
+        <div id="page-technicians" class="page-section hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Technician Management</h1>
+              <p class="text-sm text-gray-400 mt-0.5">View and manage field technicians and their assignments.</p>
+            </div>
+            <button class="btn-primary text-sm">+ Add Technician</button>
+          </div>
+          <div id="technicianCards" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div id="page-notifications" class="page-section hidden space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Notifications Preview</h1>
+            <p class="text-sm text-gray-400 mt-0.5">Preview SMS &amp; WhatsApp message templates sent to customers.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="card">
+              <div class="flex items-center gap-2 mb-4"><span class="text-xl">📱</span>
+                <h2 class="font-semibold text-gray-700 dark:text-gray-200">WhatsApp Messages</h2>
+              </div>
+              <div id="whatsappMessages" class="space-y-4"></div>
+            </div>
+            <div class="card">
+              <div class="flex items-center gap-2 mb-4"><span class="text-xl">💬</span>
+                <h2 class="font-semibold text-gray-700 dark:text-gray-200">SMS Templates</h2>
+              </div>
+              <div id="smsMessages" class="space-y-4"></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ─── DATA ────────────────────────────────────────────────
+    const customers = [
+      { name: 'Rajesh Sharma', phone: '98201 44312', city: 'Pune', model: 'Kent Grand+ RO', date: '2023-04-10', amc: 'Active' },
+      { name: 'Priya Kulkarni', phone: '98765 11223', city: 'Mumbai', model: 'AquaGuard UV', date: '2023-07-22', amc: 'Active' },
+      { name: 'Anita Deshmukh', phone: '97654 32100', city: 'Pune', model: 'Pureit UF Classic', date: '2022-11-01', amc: 'Expired' },
+      { name: 'Ashish Mate', phone: '99870 56789', city: 'Nashik', model: 'Livpure Smart RO', date: '2024-01-15', amc: 'Active' },
+      { name: 'Sneha Joshi', phone: '88765 44321', city: 'Mumbai', model: 'Kent Grand+ RO', date: '2022-06-30', amc: 'Expired' },
+      { name: 'Amit Naik', phone: '97712 88900', city: 'Pune', model: 'AquaGuard UV', date: '2023-09-05', amc: 'Active' },
+      { name: 'Kavita Singh', phone: '91234 56789', city: 'Nashik', model: 'Pureit UF Classic', date: '2024-02-20', amc: 'Active' },
+      { name: 'Rohit Marathe', phone: '98001 23456', city: 'Pune', model: 'Livpure Smart RO', date: '2023-03-14', amc: 'No AMC' },
+    ];
+
+    const services = [
+      { name: 'Rajesh Sharma', phone: '98201 44312', model: 'Kent Grand+ RO', date: '2026-03-28', tech: 'Ganesh More', status: 'Due' },
+      { name: 'Priya Kulkarni', phone: '98765 11223', model: 'AquaGuard UV', date: '2026-03-29', tech: 'Sunil Pawar', status: 'Due' },
+      { name: 'Ashish Mate', phone: '99870 56789', model: 'Livpure Smart RO', date: '2026-03-25', tech: 'Rakesh Yadav', status: 'Completed' },
+      { name: 'Anita Deshmukh', phone: '97654 32100', model: 'Pureit UF Classic', date: '2026-03-10', tech: 'Unassigned', status: 'Overdue' },
+      { name: 'Sneha Joshi', phone: '88765 44321', model: 'Kent Grand+ RO', date: '2026-03-05', tech: 'Ganesh More', status: 'Overdue' },
+      { name: 'Amit Naik', phone: '97712 88900', model: 'AquaGuard UV', date: '2026-04-01', tech: 'Sunil Pawar', status: 'Due' },
+      { name: 'Kavita Singh', phone: '91234 56789', model: 'Pureit UF Classic', date: '2026-03-26', tech: 'Rakesh Yadav', status: 'Completed' },
+      { name: 'Rohit Marathe', phone: '98001 23456', model: 'Livpure Smart RO', date: '2026-03-12', tech: 'Unassigned', status: 'Overdue' },
+    ];
+
+    const repairs = [
+      { id: 'TKT-1021', customer: 'Rajesh Sharma', phone: '98201 44312', issue: 'Low water pressure, filter clogged', status: 'Open', priority: 'High' },
+      { id: 'TKT-1020', customer: 'Anita Deshmukh', phone: '97654 32100', issue: 'Electrical fault – unit not switching on', status: 'Assigned', priority: 'High' },
+      { id: 'TKT-1019', customer: 'Ashish Mate', phone: '99870 56789', issue: 'Taste issue after filter change', status: 'Open', priority: 'Medium' },
+      { id: 'TKT-1018', customer: 'Sneha Joshi', phone: '88765 44321', issue: 'Water leakage from bottom panel', status: 'Closed', priority: 'Low' },
+      { id: 'TKT-1017', customer: 'Amit Naik', phone: '97712 88900', issue: 'RO membrane replacement needed', status: 'Assigned', priority: 'Medium' },
+      { id: 'TKT-1016', customer: 'Kavita Singh', phone: '91234 56789', issue: 'UV lamp not working', status: 'Closed', priority: 'Low' },
+    ];
+
+    const technicians = [
+      { name: 'Ganesh More', phone: '98201 11111', city: 'Pune', jobs: 5, status: 'Busy', rating: '4.8', experience: '5 yrs' },
+      { name: 'Sunil Pawar', phone: '97654 22222', city: 'Mumbai', jobs: 3, status: 'Busy', rating: '4.6', experience: '3 yrs' },
+      { name: 'Rakesh Yadav', phone: '99870 33333', city: 'Nashik', jobs: 2, status: 'Available', rating: '4.9', experience: '7 yrs' },
+      { name: 'Deepak Salvi', phone: '88765 44444', city: 'Pune', jobs: 0, status: 'Available', rating: '4.5', experience: '2 yrs' },
+      { name: 'Mahesh Raut', phone: '91234 55555', city: 'Mumbai', jobs: 4, status: 'Busy', rating: '4.7', experience: '4 yrs' },
+    ];
+
+    const upcoming = [
+      { name: 'Rajesh Sharma', date: '28 Mar', status: 'Due' },
+      { name: 'Priya Kulkarni', date: '29 Mar', status: 'Due' },
+      { name: 'Kavita Singh', date: '26 Mar', status: 'Completed' },
+      { name: 'Amit Naik', date: '01 Apr', status: 'Due' },
+    ];
+    const overdue = [
+      { name: 'Anita Deshmukh', due: '10 Mar', days: 17 },
+      { name: 'Sneha Joshi', due: '05 Mar', days: 22 },
+      { name: 'Rohit Marathe', due: '12 Mar', days: 15 },
+    ];
+    const waMessages = [
+      { type: 'Reminder', to: 'Rajesh Sharma', msg: 'Hello Rajesh ji 🙏, your water purifier service is due on 28 March 2026. Please ensure someone is home between 10AM–1PM. For queries call: 9820100000.' },
+      { type: 'Confirmation', to: 'Priya Kulkarni', msg: 'Dear Priya, your service appointment has been confirmed for 29 March 2026. Technician Sunil Pawar will visit. Thank you for choosing AquaCare Pro! 💧' },
+      { type: 'Completion', to: 'Ashish Mate', msg: 'Hi Vikas ji ✅, your purifier service has been completed on 25 March. Next service due: 25 Sep 2026. Feedback: wa.me/c/feedback. Thank you!' },
+    ];
+    const smsMessages = [
+      { type: 'Reminder', to: '9765432100', msg: 'AquaCare: Your purifier service is due 10-Mar. Call 9820100000 or visit aquacarepro.in. -AquaCare Pro' },
+      { type: 'Overdue Alert', to: '9876511223', msg: 'URGENT: Your AquaCare service is 22 days overdue. Drinking unserviced water may be harmful. Call now: 9820100000. -AquaCare Pro' },
+      { type: 'AMC Expiry', to: '9870056789', msg: 'AquaCare: Your AMC expires on 31-Mar-2026. Renew now @ Rs 2500/yr. Call 9820100000. -AquaCare Pro' },
+    ];
+
+    // ─── RENDER ──────────────────────────────────────────────
+    function badge(s) {
+      const map = {
+        Active: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+        Expired: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+        'No AMC': 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+        Due: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+        Completed: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+        Overdue: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+        Open: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400',
+        Assigned: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+        Closed: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+        Available: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+        Busy: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+        High: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+        Medium: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+        Low: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+      };
+      return `<span class="badge ${map[s] || ''}">${s}</span>`;
+    }
+
+    function renderCustomers() {
+      document.getElementById('customerTable').innerHTML = customers.map(c => `
+    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+      <td class="px-4 py-3 font-medium">${c.name}</td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.phone}</td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.city}</td>
+      <td class="px-4 py-3"><span class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">${c.model}</span></td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.date}</td>
+      <td class="px-4 py-3">${badge(c.amc)}</td>
+      <td class="px-4 py-3"><div class="flex gap-2"><button class="text-xs text-indigo-500 hover:underline">Edit</button><button class="text-xs text-red-400 hover:underline">Delete</button></div></td>
+    </tr>`).join('');
+    }
+
+    function renderAMC(filter = 'all') {
+      let data = services;
+      if (filter === 'week') data = services.filter(s => ['Due'].includes(s.status));
+      if (filter === 'month') data = services.filter(s => s.status !== 'Overdue');
+      document.getElementById('amcTable').innerHTML = data.map(s => `
+    <tr class="${s.status === 'Overdue' ? 'bg-red-50 dark:bg-red-900/10' : ''} hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+      <td class="px-4 py-3 font-medium">${s.name}</td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${s.phone}</td>
+      <td class="px-4 py-3"><span class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">${s.model}</span></td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${s.date}</td>
+      <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${s.tech}</td>
+      <td class="px-4 py-3">${badge(s.status)}</td>
+    </tr>`).join('');
+    }
+
+    function renderRepairs() {
+      const colors = { Open: 'border-blue-300 dark:border-blue-700', Assigned: 'border-yellow-300 dark:border-yellow-700', Closed: 'border-gray-200 dark:border-gray-600' };
+      const techs = ['Ganesh More', 'Sunil Pawar', 'Rakesh Yadav', 'Deepak Salvi', 'Mahesh Raut'];
+      document.getElementById('repairTickets').innerHTML = repairs.map(r => `
+    <div class="card border-l-4 ${colors[r.status]} space-y-3">
+      <div class="flex justify-between items-start">
+        <div><span class="text-xs font-mono text-gray-400">${r.id}</span><h3 class="font-semibold text-gray-800 dark:text-gray-100 mt-0.5">${r.customer}</h3><p class="text-xs text-gray-400">${r.phone}</p></div>
+        <div class="flex flex-col items-end gap-1">${badge(r.status)}${badge(r.priority)}</div>
+      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-3 py-2">${r.issue}</p>
+      <div class="flex items-center gap-2">
+        <label class="text-xs text-gray-400">Assign:</label>
+        <select class="flex-1 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-400">
+          <option>Select Technician</option>${techs.map(t => `<option>${t}</option>`).join('')}
+        </select>
+      </div>
+    </div>`).join('');
+    }
+
+    function renderTechnicians() {
+      document.getElementById('technicianCards').innerHTML = technicians.map(t => `
+    <div class="card space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">${t.name.charAt(0)}</div>
+        <div><div class="font-semibold text-gray-800 dark:text-gray-100">${t.name}</div><div class="text-xs text-gray-400">${t.city} · ${t.experience}</div></div>
+        <div class="ml-auto">${badge(t.status)}</div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2"><div class="font-bold text-gray-800 dark:text-white">${t.jobs}</div><div class="text-xs text-gray-400">Jobs</div></div>
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2"><div class="font-bold text-yellow-500">⭐ ${t.rating}</div><div class="text-xs text-gray-400">Rating</div></div>
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2"><div class="font-bold text-gray-800 dark:text-white">${t.experience}</div><div class="text-xs text-gray-400">Exp</div></div>
+      </div>
+      <div class="flex gap-2"><button class="flex-1 btn-ghost text-xs">View Schedule</button><button class="flex-1 btn-primary text-xs">Assign Job</button></div>
+    </div>`).join('');
+    }
+
+    function renderNotifications() {
+      function msgBubble(type, label, msg, sent) {
+        const colors = { Reminder: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700', Confirmation: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700', Completion: 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700', 'Overdue Alert': 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700', 'AMC Expiry': 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-700' };
+        return `<div class="border rounded-xl p-4 ${colors[type] || ''}">
+      <div class="flex justify-between items-center mb-2"><span class="text-xs font-semibold text-indigo-600 dark:text-indigo-300">${type}</span><span class="text-xs text-gray-400">To: ${label}</span></div>
+      <p class="text-sm text-gray-700 dark:text-gray-200">${msg}</p>
+      <div class="flex justify-between items-center mt-2"><span class="text-xs text-gray-400">27 Mar 2026 · 10:30 AM</span><span class="text-xs text-green-500 font-medium">✓ Sent</span></div>
+    </div>`;
+      }
+      document.getElementById('whatsappMessages').innerHTML = waMessages.map(m => msgBubble(m.type, m.to, m.msg)).join('');
+      document.getElementById('smsMessages').innerHTML = smsMessages.map(m => msgBubble(m.type, m.to, m.msg)).join('');
+    }
+
+    function renderDashboard() {
+      document.getElementById('upcomingTable').innerHTML = upcoming.map(u => `
+    <tr class="border-b border-gray-50 dark:border-gray-700 last:border-0">
+      <td class="py-2.5 font-medium">${u.name}</td>
+      <td class="py-2.5 text-gray-500">${u.date}</td>
+      <td class="py-2.5">${badge(u.status)}</td>
+    </tr>`).join('');
+      document.getElementById('overdueTable').innerHTML = overdue.map(o => `
+    <tr class="border-b border-gray-50 dark:border-gray-700 last:border-0">
+      <td class="py-2.5 font-medium text-red-600 dark:text-red-400">${o.name}</td>
+      <td class="py-2.5 text-gray-500">${o.due}</td>
+      <td class="py-2.5"><span class="badge bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400">${o.days}d</span></td>
+    </tr>`).join('');
+    }
+
+    // ─── CHARTS ──────────────────────────────────────────────
+    function initCharts() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+      const textColor = isDark ? '#9ca3af' : '#6b7280';
+      new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+          datasets: [
+            { label: 'Revenue (₹K)', data: [110, 145, 160, 130, 155, 180], backgroundColor: 'rgba(99,102,241,0.8)', borderRadius: 6, yAxisID: 'y' },
+            { label: 'Services', type: 'line', data: [18, 24, 28, 20, 26, 31], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.4, fill: true, yAxisID: 'y1' },
+          ]
+        },
+        options: { plugins: { legend: { labels: { color: textColor, font: { size: 11 } } } }, scales: { y: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Revenue (₹K)', color: textColor } }, y1: { position: 'right', grid: { display: false }, ticks: { color: textColor } } } }
+      });
+      new Chart(document.getElementById('amcChart'), {
+        type: 'doughnut',
+        data: { labels: ['Active', 'Expired', 'No AMC'], datasets: [{ data: [186, 38, 24], backgroundColor: ['#6366f1', '#f87171', '#d1d5db'], borderWidth: 0, hoverOffset: 4 }] },
+        options: { cutout: '72%', plugins: { legend: { display: false } } }
+      });
+    }
+
+    // ─── NAVIGATION ──────────────────────────────────────────
+    function navigate(page) {
+      document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
+      document.getElementById('page-' + page).classList.remove('hidden');
+      document.querySelectorAll('[data-page]').forEach(b => {
+        const isActive = b.dataset.page === page;
+        b.classList.toggle('active-link', isActive);
+        b.classList.toggle('text-gray-400', !isActive);
+        b.classList.toggle('hover:text-white', !isActive);
+      });
+    }
+
+    function filterAMC(f) {
+      ['all', 'week', 'month'].forEach(id => {
+        const btn = document.getElementById('filter-' + id);
+        btn.className = id === f ? 'btn-primary text-xs' : 'btn-ghost text-xs';
+      });
+      renderAMC(f);
+    }
+
+    function openModal() { document.getElementById('modalOverlay').classList.replace('hidden', 'flex'); }
+    function closeModal() { document.getElementById('modalOverlay').classList.replace('flex', 'hidden'); }
+    document.getElementById('modalOverlay').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
+
+    function toggleDark() { document.documentElement.classList.toggle('dark'); }
+
+    // ─── INIT ────────────────────────────────────────────────
+    renderDashboard();
+    renderCustomers();
+    renderAMC();
+    renderRepairs();
+    renderTechnicians();
+    renderNotifications();
+    initCharts();
+  </script>
+
+<style>
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast-msg{animation:slideIn .3s ease;pointer-events:auto}
+.progress-bar{height:6px;border-radius:9px;background:#e0e7ff;overflow:hidden}
+.progress-fill{height:100%;border-radius:9px;background:linear-gradient(90deg,#6366f1,#8b5cf6);transition:width .8s ease}
+#custDrawer{transform:translateX(100%);transition:transform .3s ease}
+#custDrawer.open{transform:translateX(0)}
+</style>
+
+<!-- Toast Container -->
+<div id="toastBox" class="fixed bottom-6 right-6 z-[999] flex flex-col gap-2 pointer-events-none"></div>
+
+<!-- Schedule Service Modal -->
+<div id="schedModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+<div class="flex justify-between items-center mb-4"><h3 class="text-lg font-semibold dark:text-white">Schedule Service</h3><button onclick="closeSched()" class="text-gray-400 text-2xl">&times;</button></div>
+<div class="space-y-3">
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Customer</label><select id="schedCust" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"></select></div>
+<div class="grid grid-cols-2 gap-3">
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Date</label><input type="date" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"/></div>
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Technician</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>Ganesh More</option><option>Sunil Pawar</option><option>Rakesh Yadav</option><option>Deepak Salvi</option></select></div>
+</div>
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Notes</label><textarea rows="2" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Any special instructions…"></textarea></div>
+</div>
+<div class="flex gap-3 mt-4 justify-end"><button onclick="closeSched()" class="btn-ghost">Cancel</button><button onclick="closeSched();showToast('Service scheduled successfully!','success')" class="btn-primary">Schedule</button></div>
+</div></div>
+
+<!-- New Ticket Modal -->
+<div id="ticketModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+<div class="flex justify-between items-center mb-4"><h3 class="text-lg font-semibold dark:text-white">New Repair Ticket</h3><button onclick="closeTicket()" class="text-gray-400 text-2xl">&times;</button></div>
+<div class="space-y-3">
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Customer</label><select id="ticketCust" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"></select></div>
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Issue Description</label><textarea rows="3" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Describe the issue…"></textarea></div>
+<div class="grid grid-cols-2 gap-3">
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Priority</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>High</option><option>Medium</option><option>Low</option></select></div>
+<div><label class="text-xs font-medium text-gray-500 block mb-1">Technician</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>Ganesh More</option><option>Sunil Pawar</option><option>Rakesh Yadav</option></select></div>
+</div>
+</div>
+<div class="flex gap-3 mt-4 justify-end"><button onclick="closeTicket()" class="btn-ghost">Cancel</button><button onclick="closeTicket();showToast('Ticket TKT-1022 created!','success')" class="btn-primary">Create Ticket</button></div>
+</div></div>
+
+<!-- Tech Schedule Modal -->
+<div id="techSchedModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+<div class="flex justify-between items-center mb-4"><h3 id="techSchedTitle" class="text-lg font-semibold dark:text-white">Schedule</h3><button onclick="document.getElementById('techSchedModal').classList.replace('flex','hidden')" class="text-gray-400 text-2xl">&times;</button></div>
+<div id="techSchedBody" class="space-y-2 max-h-64 overflow-y-auto"></div>
+<div class="flex justify-end mt-4"><button onclick="document.getElementById('techSchedModal').classList.replace('flex','hidden')" class="btn-primary">Close</button></div>
+</div></div>
+
+<!-- Drawer Overlay -->
+<div id="drawerOverlay" onclick="closeDrawer()" class="fixed inset-0 z-[55] bg-black/40 hidden"></div>
+<!-- Customer Drawer -->
+<div id="custDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl z-[60] overflow-y-auto">
+<div class="p-6"><div class="flex justify-between items-center mb-5"><h3 class="text-lg font-semibold dark:text-white">Customer Details</h3><button onclick="closeDrawer()" class="text-gray-400 text-2xl">&times;</button></div><div id="drawerBody"></div></div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notifPanel" class="hidden fixed top-16 right-4 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 z-[100]">
+<div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex justify-between"><span class="font-semibold text-sm dark:text-white">Notifications</span><span class="text-xs text-indigo-500 cursor-pointer">Mark all read</span></div>
+<div id="notifList" class="divide-y divide-gray-50 dark:divide-gray-700 max-h-72 overflow-y-auto"></div>
+</div>
+
+<script>
+(function(){
+// ── TOAST ─────────────────────────────────────────────────
+window.showToast=function(msg,type){
+  const c={success:'bg-green-500',error:'bg-red-500',info:'bg-blue-500'};
+  const ic={success:'✓',error:'✗',info:'ℹ'};
+  const d=document.createElement('div');
+  d.className=`toast-msg flex items-center gap-2 px-4 py-3 rounded-xl text-white text-sm font-medium shadow-xl ${c[type]||'bg-indigo-600'}`;
+  d.innerHTML=`<span>${ic[type]||'✓'}</span><span>${msg}</span>`;
+  const box=document.getElementById('toastBox');
+  if(box){box.appendChild(d);setTimeout(()=>d.remove(),3000);}
+};
+
+// ── MODALS ────────────────────────────────────────────────
+window.openSched=function(){document.getElementById('schedModal').classList.replace('hidden','flex');};
+window.closeSched=function(){document.getElementById('schedModal').classList.replace('flex','hidden');};
+window.openTicket=function(){document.getElementById('ticketModal').classList.replace('hidden','flex');};
+window.closeTicket=function(){document.getElementById('ticketModal').classList.replace('flex','hidden');};
+['schedModal','ticketModal','techSchedModal'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('click',e=>{if(e.target===el)el.classList.replace('flex','hidden');});
+});
+
+// ── NOTIFICATION PANEL ────────────────────────────────────
+const alerts=[
+  {icon:'🔴',msg:'Anita Deshmukh – 17 days overdue',time:'2h ago'},
+  {icon:'🔴',msg:'Sneha Joshi – 22 days overdue',time:'3h ago'},
+  {icon:'🟡',msg:'AMC expiring: Vikas Patil (31 Mar)',time:'5h ago'},
+  {icon:'🔵',msg:'New ticket TKT-1021 opened',time:'1d ago'},
+  {icon:'🟢',msg:'Service completed: Kavita Singh',time:'2d ago'},
+];
+const nl=document.getElementById('notifList');
+if(nl)nl.innerHTML=alerts.map(a=>`<div class="px-4 py-3 flex gap-3 items-start hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"><span class="text-lg">${a.icon}</span><div><p class="text-sm dark:text-gray-200">${a.msg}</p><p class="text-xs text-gray-400 mt-0.5">${a.time}</p></div></div>`).join('');
+window.toggleNotif=function(){document.getElementById('notifPanel').classList.toggle('hidden');};
+document.addEventListener('click',function(e){
+  const p=document.getElementById('notifPanel');
+  if(p&&!p.classList.contains('hidden')&&!p.contains(e.target)&&!e.target.closest('#bellBtn'))p.classList.add('hidden');
+});
+
+// ── CUSTOMER DRAWER ───────────────────────────────────────
+window.openDrawer=function(idx){
+  const c=customers[idx];
+  const hist=[
+    {d:'2025-09-10',t:'Ganesh More',desc:'Quarterly service – filters cleaned'},
+    {d:'2025-03-15',t:'Sunil Pawar',desc:'Annual – RO membrane replaced'},
+    {d:'2024-09-05',t:'Rakesh Yadav',desc:'Filter cartridge replacement'},
+  ];
+  const exp=c.date.slice(0,4)*1+2+c.date.slice(4);
+  document.getElementById('drawerBody').innerHTML=`
+    <div class="flex items-center gap-4 mb-5">
+      <div class="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">${c.name[0]}</div>
+      <div><div class="font-semibold text-lg dark:text-white">${c.name}</div><div class="text-sm text-gray-400">${c.city} · ${c.phone}</div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 text-sm mb-5">
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3"><div class="text-xs text-gray-400 mb-1">Model</div><div class="font-medium dark:text-white text-xs">${c.model}</div></div>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3"><div class="text-xs text-gray-400 mb-1">AMC</div><span class="badge ${c.amc==='Active'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${c.amc}</span></div>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3"><div class="text-xs text-gray-400 mb-1">Purchase</div><div class="font-medium dark:text-white text-xs">${c.date}</div></div>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-3"><div class="text-xs text-gray-400 mb-1">AMC Expires</div><div class="font-medium dark:text-white text-xs">${exp}</div></div>
+    </div>
+    <div class="mb-5">
+      <div class="flex justify-between mb-3"><span class="font-semibold dark:text-white text-sm">Service History</span><span class="text-xs text-gray-400">${hist.length} visits</span></div>
+      ${hist.map((h,i)=>`<div class="flex gap-3 mb-3"><div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-indigo-500 mt-0.5 flex-shrink-0"></div>${i<hist.length-1?'<div class="w-px flex-1 bg-gray-200 dark:bg-gray-600 mt-1"></div>':''}</div><div class="pb-3 flex-1"><div class="text-xs text-gray-400">${h.d}</div><div class="text-sm dark:text-white">${h.desc}</div><div class="text-xs text-gray-400">by ${h.t}</div></div></div>`).join('')}
+    </div>
+    <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-xl p-4">
+      <div class="text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-1">Renew AMC</div>
+      <div class="text-xs text-gray-500 mb-3">Expires ${exp}. Renew for continued coverage.</div>
+      <button onclick="showToast('Renewal initiated for ${c.name}!','success')" class="btn-primary text-xs w-full">Renew AMC – ₹2,500/yr</button>
+    </div>`;
+  document.getElementById('custDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.remove('hidden');
+};
+window.closeDrawer=function(){
+  document.getElementById('custDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.add('hidden');
+};
+
+// ── TECH SCHEDULE MODAL ───────────────────────────────────
+window.openTechSched=function(idx){
+  const t=technicians[idx];
+  const allJobs=[
+    {c:'Rajesh Sharma',d:'28 Mar',m:'Kent Grand+ RO',s:'Due'},
+    {c:'Priya Kulkarni',d:'29 Mar',m:'AquaGuard UV',s:'Due'},
+    {c:'Kavita Singh',d:'26 Mar',m:'Pureit UF',s:'Completed'},
+    {c:'Amit Naik',d:'01 Apr',m:'AquaGuard UV',s:'Due'},
+    {c:'Vikas Patil',d:'25 Mar',m:'Livpure Smart RO',s:'Completed'},
+  ];
+  const jobs=allJobs.slice(0,Math.max(1,t.jobs));
+  document.getElementById('techSchedTitle').textContent=t.name+"'s Schedule";
+  document.getElementById('techSchedBody').innerHTML=jobs.map(j=>`<div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 rounded-xl p-3"><div><div class="font-medium text-sm dark:text-white">${j.c}</div><div class="text-xs text-gray-400">${j.m}</div></div><div class="text-right"><div class="text-xs text-gray-400 mb-1">${j.d}</div><span class="badge ${j.s==='Completed'?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'}">${j.s}</span></div></div>`).join('');
+  document.getElementById('techSchedModal').classList.replace('hidden','flex');
+};
+
+// ── ENHANCED RENDER CUSTOMERS ─────────────────────────────
+let custPage=1;const PG=5;
+window.renderCustomers=function(){
+  const q=(document.getElementById('custSearch')?.value||'').toLowerCase();
+  const s=document.getElementById('custStatusFilter')?.value||'All Status';
+  const c=document.getElementById('custCityFilter')?.value||'All Cities';
+  let d=customers.filter(x=>{
+    const mq=!q||x.name.toLowerCase().includes(q)||x.phone.includes(q)||x.city.toLowerCase().includes(q);
+    const ms=s==='All Status'||(s==='Active AMC'?x.amc==='Active':x.amc===s);
+    return mq&&ms&&(c==='All Cities'||x.city===c);
+  });
+  const pages=Math.max(1,Math.ceil(d.length/PG));
+  custPage=Math.min(custPage,pages);
+  const paged=d.slice((custPage-1)*PG,custPage*PG);
+  const tb=document.getElementById('customerTable');
+  if(tb)tb.innerHTML=paged.map(c=>`<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+    <td class="px-4 py-3 font-medium dark:text-white">${c.name}</td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.phone}</td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.city}</td>
+    <td class="px-4 py-3"><span class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">${c.model}</span></td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${c.date}</td>
+    <td class="px-4 py-3">${badge(c.amc)}</td>
+    <td class="px-4 py-3"><div class="flex gap-2">
+      <button onclick="openDrawer(${customers.indexOf(c)})" class="text-xs text-indigo-500 hover:underline">View</button>
+      <button class="text-xs text-indigo-500 hover:underline">Edit</button>
+      <button class="text-xs text-red-400 hover:underline">Del</button>
+    </div></td></tr>`).join('');
+  const pg=document.getElementById('custPagination');
+  if(pg)pg.innerHTML=`<div class="flex items-center gap-1 flex-wrap py-3 px-4 border-t border-gray-50 dark:border-gray-700">
+    <span class="text-xs text-gray-400 mr-auto">${d.length} result(s)</span>
+    <button onclick="goCustPage(${custPage-1})" ${custPage<=1?'disabled':''} class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded-lg text-xs hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40">Prev</button>
+    ${Array.from({length:pages},(_,i)=>`<button onclick="goCustPage(${i+1})" class="px-3 py-1 border rounded-lg text-xs ${i+1===custPage?'bg-indigo-600 text-white border-indigo-600':'border-gray-200 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}">${i+1}</button>`).join('')}
+    <button onclick="goCustPage(${custPage+1})" ${custPage>=pages?'disabled':''} class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded-lg text-xs hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40">Next</button>
+  </div>`;
+};
+window.goCustPage=function(p){custPage=p;renderCustomers();};
+
+// ── ENHANCED RENDER REPAIRS ───────────────────────────────
+const repData=JSON.parse(JSON.stringify(repairs));
+const statusNext={Open:'Assigned',Assigned:'Closed',Closed:'Open'};
+let expandedT=new Set();
+window.renderRepairs=function(){
+  const sf=document.getElementById('repStatF')?.value||'All';
+  const pf=document.getElementById('repPriF')?.value||'All';
+  const colors={Open:'border-blue-300 dark:border-blue-700',Assigned:'border-yellow-300 dark:border-yellow-700',Closed:'border-gray-200 dark:border-gray-600'};
+  const techs=['Ganesh More','Sunil Pawar','Rakesh Yadav','Deepak Salvi','Mahesh Raut'];
+  let d=repData.filter(r=>(sf==='All'||r.status===sf)&&(pf==='All'||r.priority===pf));
+  const el=document.getElementById('repairTickets');
+  if(el)el.innerHTML=d.length?d.map(r=>{
+    const ri=repData.indexOf(r);const exp=expandedT.has(ri);
+    return `<div class="card border-l-4 ${colors[r.status]} space-y-3">
+      <div class="flex justify-between items-start cursor-pointer" onclick="toggleExp(${ri})">
+        <div><span class="text-xs font-mono text-gray-400">${r.id}</span><h3 class="font-semibold dark:text-white mt-0.5">${r.customer}</h3><p class="text-xs text-gray-400">${r.phone}</p></div>
+        <div class="flex flex-col items-end gap-1">${badge(r.status)}${badge(r.priority)}</div>
+      </div>
+      ${exp?`<p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-3 py-2">${r.issue}</p>
+        <div class="flex items-center gap-2">
+          <select class="flex-1 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-2 py-1 text-xs focus:outline-none">
+            <option>Select Technician</option>${techs.map(t=>`<option>${t}</option>`).join('')}
+          </select>
+          <button onclick="cycleStatus(${ri})" class="btn-primary text-xs px-3">${statusNext[r.status]} →</button>
+        </div>`:'<p class="text-xs text-gray-400">▼ Click to expand details & assign</p>'}
+    </div>`;}).join(''):`<div class="col-span-3 text-center py-12 text-gray-400 text-sm">No tickets match the selected filters.</div>`;
+};
+window.toggleExp=function(i){expandedT.has(i)?expandedT.delete(i):expandedT.add(i);renderRepairs();};
+window.cycleStatus=function(i){repData[i].status=statusNext[repData[i].status];showToast('Status updated to '+repData[i].status,'success');renderRepairs();};
+window.filterRepairs=function(){custPage=1;renderRepairs();};
+
+// ── ENHANCED RENDER TECHNICIANS ───────────────────────────
+const techState=JSON.parse(JSON.stringify(technicians));
+window.renderTechnicians=function(){
+  const zones={Pune:'Pune Central',Mumbai:'Mumbai West',Nashik:'Nashik Zone'};
+  const el=document.getElementById('technicianCards');
+  if(el)el.innerHTML=techState.map((t,i)=>{
+    const pct=Math.min(100,Math.round(t.jobs/8*100));
+    return `<div class="card space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">${t.name[0]}</div>
+        <div><div class="font-semibold dark:text-gray-100">${t.name}</div><div class="text-xs text-gray-400">${t.city} · ${t.experience}</div></div>
+        <button onclick="toggleTech(${i})" class="ml-auto">${badge(t.status)}</button>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+        <span>📍</span><span>Coverage: <strong>${zones[t.city]||t.city+' Zone'}</strong></span>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs text-gray-400 mb-1.5"><span>Monthly Jobs</span><span>${t.jobs}/8</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-center">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2"><div class="font-bold text-yellow-500 text-sm">⭐ ${t.rating}</div><div class="text-xs text-gray-400">Rating</div></div>
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2"><div class="font-bold dark:text-white text-sm">${t.jobs}</div><div class="text-xs text-gray-400">Jobs</div></div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="openTechSched(${i})" class="flex-1 btn-ghost text-xs">View Schedule</button>
+        <button onclick="showToast('Job assigned to ${t.name}!','success')" class="flex-1 btn-primary text-xs">Assign Job</button>
+      </div>
+    </div>`;
+  }).join('');
+};
+window.toggleTech=function(i){techState[i].status=techState[i].status==='Available'?'Busy':'Available';showToast(techState[i].name+' is now '+techState[i].status,'info');renderTechnicians();};
+
+// ── SERVICE PIE CHART ─────────────────────────────────────
+window.initServiceChart=function(){
+  const ctx=document.getElementById('serviceChart');if(!ctx)return;
+  new Chart(ctx,{type:'doughnut',data:{labels:['Completed','Due','Overdue'],datasets:[{data:[2,3,3],backgroundColor:['#22c55e','#eab308','#ef4444'],borderWidth:0,hoverOffset:4}]},options:{cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',font:{size:11},padding:10}}}}});
+};
+
+// ── CALENDAR VIEW ─────────────────────────────────────────
+window.toggleCalView=function(v){
+  const tw=document.getElementById('amcTableWrap');const cw=document.getElementById('amcCalWrap');
+  if(tw)tw.classList.toggle('hidden',v==='cal');
+  if(cw)cw.classList.toggle('hidden',v==='table');
+  ['table','cal'].forEach(id=>{const b=document.getElementById('view-'+id);if(b)b.className=id===v?'btn-primary text-xs':'btn-ghost text-xs';});
+  if(v==='cal'&&cw){
+    const sd={5:'Overdue',10:'Overdue',12:'Overdue',25:'Completed',26:'Completed',28:'Due',29:'Due'};
+    const dc={Due:'bg-yellow-400',Completed:'bg-green-400',Overdue:'bg-red-400'};
+    const days=['S','M','T','W','T','F','S'];const first=new Date(2026,2,1).getDay();
+    let h=`<div class="card"><div class="font-semibold dark:text-white mb-4">March 2026 – Service Calendar</div><div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-400 mb-2">${days.map(d=>`<div>${d}</div>`).join('')}</div><div class="grid grid-cols-7 gap-1">`;
+    for(let i=0;i<first;i++)h+='<div></div>';
+    for(let d=1;d<=31;d++){const s=sd[d];h+=`<div class="aspect-square flex flex-col items-center justify-center rounded-lg text-xs ${s?'bg-indigo-50 dark:bg-indigo-900/30 font-semibold text-indigo-600':'text-gray-600 dark:text-gray-300'} hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors">${d}${s?`<div class="w-1.5 h-1.5 rounded-full mt-0.5 ${dc[s]}"></div>`:''}</div>`;}
+    h+='</div></div>';cw.innerHTML=h;
+  }
+};
+
+// ── ENHANCED AMC RENDER ───────────────────────────────────
+const amcExp=['2026-09-10','2026-12-22','2025-11-01','2027-01-15','2025-06-30','2026-04-05','2027-02-20','No AMC'];
+window.renderAMC=function(filt){
+  filt=filt||'all';
+  ['all','week','month'].forEach(id=>{const b=document.getElementById('filter-'+id);if(b)b.className=id===filt?'btn-primary text-xs':'btn-ghost text-xs';});
+  let d=services.map((s,i)=>({...s,exp:amcExp[i]||'—',visit:i+1}));
+  if(filt==='week')d=d.filter(s=>s.status==='Due');
+  if(filt==='month')d=d.filter(s=>s.status!=='Overdue');
+  const tb=document.getElementById('amcTable');
+  if(tb)tb.innerHTML=d.map(s=>`<tr class="${s.status==='Overdue'?'bg-red-50 dark:bg-red-900/10':''} hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+    <td class="px-4 py-3 font-medium dark:text-white">${s.name}</td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${s.phone}</td>
+    <td class="px-4 py-3"><span class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">${s.model}</span></td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs">${s.date}</td>
+    <td class="px-4 py-3 text-xs text-gray-400">${s.exp}</td>
+    <td class="px-4 py-3 text-xs font-medium text-gray-400">#${s.visit}</td>
+    <td class="px-4 py-3 text-gray-500 dark:text-gray-400">${s.tech}</td>
+    <td class="px-4 py-3">${badge(s.status)}</td></tr>`).join('');
+};
+window.filterAMC=function(f){renderAMC(f);};
+
+// ── NOTIFICATION SENDS ────────────────────────────────────
+const notifLog=[];
+window.sendNow=function(idx,name,type){
+  notifLog.unshift({to:name,type,date:'27 Mar 2026',ch:idx<3?'WhatsApp':'SMS'});
+  showToast('Message sent to '+name+'!','success');
+  renderLog();
+};
+function renderLog(){
+  const el=document.getElementById('notifLogBody');
+  if(!el)return;
+  el.innerHTML=notifLog.length?notifLog.map(n=>`<tr class="border-b border-gray-50 dark:border-gray-700">
+    <td class="px-4 py-2.5 text-sm dark:text-gray-200">${n.to}</td>
+    <td class="px-4 py-2.5"><span class="text-xs px-2 py-0.5 rounded font-medium ${n.ch==='WhatsApp'?'bg-green-100 text-green-700':'bg-blue-100 text-blue-700'}">${n.ch}</span></td>
+    <td class="px-4 py-2.5 text-xs text-gray-500">${n.type}</td>
+    <td class="px-4 py-2.5 text-xs text-gray-500">${n.date}</td>
+    <td class="px-4 py-2.5"><span class="badge bg-green-100 text-green-700">Delivered</span></td>
+  </tr>`).join(''):`<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No messages sent yet. Click "Send Now" above.</td></tr>`;
+}
+
+// ── DOM PATCHES (run after render) ───────────────────────
+setTimeout(function(){
+  // Populate dropdowns
+  ['schedCust','ticketCust'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=customers.map(c=>`<option>${c.name}</option>`).join('');
+  });
+  // Bell button
+  const btns=document.querySelectorAll('header button');
+  if(btns[1]){btns[1].id='bellBtn';btns[1].onclick=toggleNotif;}
+  // Breadcrumb
+  const hdr=document.querySelector('header');
+  if(hdr&&!document.getElementById('breadcrumb')){
+    const bc=document.createElement('span');bc.id='breadcrumb';bc.className='text-xs text-gray-400 hidden lg:block';bc.textContent='Home › Dashboard';
+    hdr.querySelector('.flex-1').after(bc);
+  }
+  // Customer filter IDs
+  const cs=document.querySelector('#page-customers input[type=text]');
+  if(cs&&!cs.id){cs.id='custSearch';cs.oninput=renderCustomers;}
+  const ss=document.querySelectorAll('#page-customers select');
+  if(ss[0]&&!ss[0].id){ss[0].id='custStatusFilter';ss[0].onchange=renderCustomers;}
+  if(ss[1]&&!ss[1].id){ss[1].id='custCityFilter';ss[1].onchange=renderCustomers;}
+  // Customer pagination
+  const cc=document.querySelector('#page-customers .card');
+  if(cc&&!document.getElementById('custPagination')){const pg=document.createElement('div');pg.id='custPagination';cc.appendChild(pg);}
+  // AMC – Schedule button
+  const amcFlex=document.querySelector('#page-amc .flex.gap-2');
+  if(amcFlex&&!document.getElementById('schedSvcBtn')){
+    const b=document.createElement('button');b.id='schedSvcBtn';b.className='btn-primary text-xs';b.textContent='+ Schedule Service';b.onclick=openSched;
+    amcFlex.prepend(b);
+  }
+  // AMC – Calendar toggle
+  const amcCard=document.querySelector('#page-amc .card');
+  if(amcCard&&!document.getElementById('view-table')){
+    const div=document.createElement('div');div.className='flex gap-2 mb-3';
+    div.innerHTML=`<span class="text-xs text-gray-400 self-center">View:</span><button id="view-table" onclick="toggleCalView('table')" class="btn-primary text-xs">Table</button><button id="view-cal" onclick="toggleCalView('cal')" class="btn-ghost text-xs">Calendar</button>`;
+    amcCard.insertAdjacentElement('beforebegin',div);
+    const calDiv=document.createElement('div');calDiv.id='amcCalWrap';calDiv.className='hidden';amcCard.insertAdjacentElement('afterend',calDiv);
+    amcCard.id='amcTableWrap'; // Assign ID after inserting new elements
+  }
+  // AMC – extra table header cols
+  const amcHead=document.querySelector('#page-amc thead tr');
+  if(amcHead&&amcHead.children.length<8){
+    const th1=Object.assign(document.createElement('th'),{className:'text-left px-4 py-3',textContent:'AMC Expiry'});
+    const th2=Object.assign(document.createElement('th'),{className:'text-left px-4 py-3',textContent:'Visit #'});
+    amcHead.insertBefore(th2,amcHead.children[4]);amcHead.insertBefore(th1,th2);
+  }
+  // Repair – filter bar
+  const repPage=document.getElementById('page-repairs');
+  if(repPage&&!document.getElementById('repStatF')){
+    const fb=document.createElement('div');fb.className='flex flex-wrap gap-3 mb-4';
+    fb.innerHTML=`<select id="repStatF" onchange="filterRepairs()" class="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>All</option><option>Open</option><option>Assigned</option><option>Closed</option></select><select id="repPriF" onchange="filterRepairs()" class="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>All</option><option>High</option><option>Medium</option><option>Low</option></select>`;
+    repPage.querySelector('#repairTickets').insertAdjacentElement('beforebegin',fb);
+  }
+  // Repair – fix New Ticket button
+  const repBtn=repPage?.querySelector('.btn-primary');
+  if(repBtn)repBtn.onclick=openTicket;
+  // Notifications – Send Now buttons
+  const waEl=document.getElementById('whatsappMessages');
+  const smsEl=document.getElementById('smsMessages');
+  function addSendBtns(el,msgs,offset){
+    if(!el)return;
+    const bgMap=['bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700','bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700','bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700'];
+    el.innerHTML=msgs.map((m,i)=>`<div class="border rounded-xl p-4 ${bgMap[i%3]}">
+      <div class="flex justify-between items-center mb-2"><span class="text-xs font-semibold text-indigo-600 dark:text-indigo-300">${m.type}</span><span class="text-xs text-gray-400">To: ${m.to}</span></div>
+      <p class="text-sm text-gray-700 dark:text-gray-200 mb-3">${m.msg}</p>
+      <div class="flex justify-between items-center"><span class="text-xs text-gray-400">27 Mar 2026</span>
+      <button onclick="sendNow(${i+offset},'${m.to}','${m.type}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors">▶ Send Now</button></div>
+    </div>`).join('');
+  }
+  addSendBtns(waEl,waMessages,0);addSendBtns(smsEl,smsMessages,3);
+  // Notifications – compose + log
+  const notifPage=document.getElementById('page-notifications');
+  if(notifPage&&!document.getElementById('notifCompose')){
+    const compose=document.createElement('div');compose.id='notifCompose';compose.className='card space-y-4';
+    compose.innerHTML=`<h2 class="font-semibold dark:text-white">Compose Message</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Customer</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm">${['All Customers',...customers.map(c=>c.name)].map(n=>`<option>${n}</option>`).join('')}</select></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Channel</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>WhatsApp</option><option>SMS</option></select></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Template</label><select class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm"><option>Reminder</option><option>Overdue Alert</option><option>AMC Expiry</option><option>Custom</option></select></div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-sm text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-600">Hello {Name}, your water purifier service is due soon. Call 9820100000. – AquaCare Pro</div>
+      <button onclick="showToast('Message sent to selected customers!','success')" class="btn-primary">Send Message</button>`;
+    notifPage.appendChild(compose);
+    const logCard=document.createElement('div');logCard.className='card';
+    logCard.innerHTML=`<h2 class="font-semibold dark:text-white mb-4">Notification Log</h2>
+      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700/50"><th class="text-left px-4 py-3">Sent To</th><th class="text-left px-4 py-3">Channel</th><th class="text-left px-4 py-3">Type</th><th class="text-left px-4 py-3">Date</th><th class="text-left px-4 py-3">Status</th></tr></thead><tbody id="notifLogBody"><tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No messages sent yet.</td></tr></tbody></table></div>`;
+    notifPage.appendChild(logCard);
+  }
+  // Settings page
+  if(!document.getElementById('page-settings')){
+    const sp=document.createElement('div');sp.id='page-settings';sp.className='page-section hidden space-y-6';
+    sp.innerHTML=`<div><h1 class="text-2xl font-bold dark:text-white">Settings</h1><p class="text-sm text-gray-400 mt-0.5">Configure your AquaCare Pro system.</p></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card space-y-4"><h2 class="font-semibold dark:text-white">Company Info</h2>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Company Name</label><input type="text" value="AquaCare Pro Services" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white"/></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Contact Phone</label><input type="text" value="+91 9820100000" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white"/></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">Logo Upload</label><div class="border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors"><div class="text-3xl mb-2">📁</div><div class="text-xs text-gray-400">Click to upload company logo</div></div></div>
+        <button onclick="showToast('Company settings saved!','success')" class="btn-primary w-full">Save Changes</button>
+      </div>
+      <div class="card space-y-4"><h2 class="font-semibold dark:text-white">API Configuration</h2>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">SMS API Key (Fast2SMS)</label><input type="password" value="sk_live_xxxxxxxxxxxx" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white"/></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">WhatsApp API Key (Twilio)</label><input type="password" value="wsk_live_xxxxxxxxxxxx" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white"/></div>
+        <div><label class="text-xs font-medium text-gray-500 block mb-1">SMS Sender ID</label><input type="text" value="AQUACR" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white"/></div>
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-3 text-xs text-yellow-700 dark:text-yellow-400">⚠ Keys are for FastAPI backend integration. Currently in prototype mode.</div>
+        <button onclick="showToast('API keys saved!','success')" class="btn-primary w-full">Save API Keys</button>
+      </div>
+      <div class="card space-y-4 lg:col-span-2"><h2 class="font-semibold dark:text-white">Message Templates</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div><label class="text-xs font-medium text-gray-500 block mb-1">Reminder</label><textarea rows="3" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white">Hello {name}, your service is due {date}. Call {phone}. -AquaCare</textarea></div>
+          <div><label class="text-xs font-medium text-gray-500 block mb-1">Overdue Alert</label><textarea rows="3" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white">URGENT {name}: Service {days} days overdue! Call {phone}. -AquaCare</textarea></div>
+          <div><label class="text-xs font-medium text-gray-500 block mb-1">AMC Expiry</label><textarea rows="3" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white">Dear {name}, AMC expires {date}. Renew Rs 2500/yr. Call {phone}. -AquaCare</textarea></div>
+        </div>
+        <button onclick="showToast('Templates saved!','success')" class="btn-primary">Save Templates</button>
+      </div>
+    </div>`;
+    document.querySelector('main').appendChild(sp);
+    // Settings nav link
+    const nav=document.querySelector('#sidebar nav');
+    if(nav&&!document.querySelector('[data-page=settings]')){
+      const b=document.createElement('button');b.dataset.page='settings';b.className='sidebar-link text-gray-400 hover:text-white text-left';b.onclick=()=>navigate('settings');
+      b.innerHTML=`<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 6a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>Settings`;
+      nav.appendChild(b);
+    }
+  }
+  // 3rd pie chart on dashboard
+  if(!document.getElementById('serviceChart')){
+    const cg=document.querySelector('#page-dashboard .grid.grid-cols-1.lg\\:grid-cols-3');
+    if(cg){
+      const div=document.createElement('div');div.className='card';
+      div.innerHTML=`<h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Service Status</h2><canvas id="serviceChart" height="160"></canvas><div class="mt-4 space-y-1.5 text-xs"><div class="flex justify-between"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>Completed</span><span class="font-semibold">2</span></div><div class="flex justify-between"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>Due</span><span class="font-semibold">3</span></div><div class="flex justify-between"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>Overdue</span><span class="font-semibold">3</span></div></div>`;
+      cg.appendChild(div);setTimeout(initServiceChart,100);
+    }
+  }
+  // KPI count-up
+  const kpis=document.querySelectorAll('#page-dashboard .card .text-2xl.font-bold');
+  [[248,''],[186,''],[24,''],[1.8,'L']].forEach(([v,s],i)=>{
+    const el=kpis[i];if(!el)return;el.textContent='0'+s;
+    let cur=0,steps=50,step=v/steps,count=0;
+    const t=setInterval(()=>{cur+=step;count++;if(count>=steps){cur=v;clearInterval(t);}
+    el.textContent=(s==='L'?cur.toFixed(1):Math.floor(cur))+s;},20);
+  });
+  // View All → AMC page
+  const vaBtn=document.querySelector('#page-dashboard button.text-xs.text-indigo-500');
+  if(vaBtn)vaBtn.onclick=()=>navigate('amc');
+  // Re-render all
+  renderCustomers();renderAMC('all');renderRepairs();renderTechnicians();
+},100);
+})();
+</script>
+</body>
+
+</html>
