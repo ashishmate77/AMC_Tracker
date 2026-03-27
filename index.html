@@ -57,10 +57,89 @@
       background: #c7d2fe;
       border-radius: 9px
     }
+    /* ── LOGIN ───────────────────────────────────────── */
+    #loginPage{animation:fadeInLogin .6s ease; background: url('https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;}
+    @keyframes fadeInLogin{from{opacity:0}to{opacity:1}}
+    @keyframes loginShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+    .li{width:100%;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.4);color:#1f2937;border-radius:.75rem;padding:.75rem 1rem;font-size:.875rem;outline:none;transition:all .15s}
+    .li:focus{box-shadow:0 0 0 2px rgba(99,102,241,0.2); border-color: #6366f1; background:rgba(255,255,255,0.6);}
+    .li::placeholder{color:#9ca3af}
+    .social-btn { @apply flex items-center justify-center p-3 border border-gray-300 rounded-xl bg-white hover:bg-gray-50 transition-all duration-200 shadow-sm; }
   </style>
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 h-full">
+
+<!-- ── LOGIN PAGE ─────────────────────────────────────────── -->
+<div id="loginPage" class="fixed inset-0 z-[300] flex items-center justify-center p-4">
+  <div id="loginCard" class="w-full max-w-[440px] bg-white/40 backdrop-blur-xl border border-white/60 rounded-[40px] p-10 shadow-2xl space-y-8">
+    
+    <!-- Header -->
+    <div class="text-center space-y-2">
+      <div class="w-14 h-14 rounded-full bg-white/90 shadow-lg flex items-center justify-center mx-auto mb-4 border border-gray-100">
+        <span class="text-2xl">💧</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-900">Welcome back</h1>
+      <p class="text-gray-600 text-sm">Please enter your detail to sign in.</p>
+    </div>
+
+    <!-- Social Login -->
+    <div class="grid grid-cols-2 gap-4">
+      <button class="social-btn">
+        <svg class="w-6 h-6 text-gray-900" fill="currentColor" viewBox="0 0 172 172"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="currentColor"><path d="M129.5668,103.38533c-0.215,22.75433 18.66917,33.68283 19.52917,34.1845c-0.17917,0.57333 -3.01,10.28417 -9.74667,20.13833c-5.81933,8.52833 -11.89667,17.02083 -21.46417,17.16417c-9.374,0.17917 -12.44133,-5.547 -23.18417,-5.547c-10.74283,0 -14.15417,5.332 -22.96917,5.72617c-9.19483,0.35833 -16.05333,-9.17333 -21.93,-17.66583c-12.00417,-17.34333 -21.1775,-48.98333 -8.74333,-70.52c6.19917,-10.707 17.16417,-17.48667 29.1325,-17.66583c9.19483,-0.17917 17.845,8.13417 23.47083,8.13417c5.62583,0 16.08917,-9.85417 27.23333,-8.7075c4.69417,0.17917 17.845,1.86333 26.26583,14.19c-0.68083,0.43 -15.62333,9.06583 -15.5875,27.26917zM111.90117,41.925c4.98083,-6.02 8.31333,-14.405 7.4175,-22.79c-7.16667,0.28667 -15.83833,4.76583 -20.9625,10.75c-4.58667,5.332 -8.63583,13.83167 -7.56083,21.96583c7.955,0.60917 16.125,-3.938 21.10583,-9.92583z"></path></g></g></svg>
+      </button>
+      <button class="social-btn">
+        <svg class="w-6 h-6" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.84-2.21c-.13-.33-.25-.68-.32-1.05z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="flex items-center gap-4 text-xs text-gray-400 font-medium">
+      <div class="h-px bg-gray-300/50 flex-1"></div>
+      <span>OR</span>
+      <div class="h-px bg-gray-300/50 flex-1"></div>
+    </div>
+
+    <!-- Form -->
+    <div class="space-y-5">
+      <div>
+        <label class="text-xs font-semibold text-gray-700 block mb-2">E-Mail Address</label>
+        <input id="loginEmail" type="email" placeholder="Enter your email..." class="li" />
+      </div>
+      <div class="relative">
+        <label class="text-xs font-semibold text-gray-700 block mb-2">Password</label>
+        <input id="loginPassword" type="password" placeholder="Password@123" class="li" onkeydown="if(event.key==='Enter')doLogin()" />
+        <button class="absolute right-4 top-[38px] text-gray-400 hover:text-gray-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-xs">
+        <label class="flex items-center gap-2 cursor-pointer text-gray-600">
+          <input type="checkbox" class="rounded border-gray-300 bg-white/50 text-indigo-600 focus:ring-0" />
+          <span>Remember me</span>
+        </label>
+        <a href="#" class="font-semibold text-gray-600 hover:text-gray-900 underline underline-offset-4">Forgot password?</a>
+      </div>
+
+      <div id="loginError" class="hidden text-xs text-red-600 bg-red-100/50 border border-red-200 rounded-xl px-4 py-3">✗ Invalid email or password. Please try again.</div>
+      
+      <button onclick="doLogin()" class="w-full bg-[#18181b] hover:bg-black text-white py-3.5 rounded-2xl font-semibold text-sm transition-all duration-200 shadow-xl shadow-black/10 mt-2">Sign in</button>
+    </div>
+
+    <p class="text-center text-sm text-gray-600">
+      Don't have an account yet? <a href="#" class="font-bold text-gray-900 hover:underline">Sign up</a>
+    </p>
+
+    <!-- Demo Helper (Hidden style) -->
+    <p class="text-center text-[10px] text-gray-400 opacity-50 pt-2">Demo: admin@aquacare.in / aqua@1234</p>
+  </div>
+</div>
 
   <!-- Modal Overlay -->
   <div id="modalOverlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -115,7 +194,7 @@
     </div>
   </div>
 
-  <div class="flex h-screen overflow-hidden">
+  <div id="mainApp" class="flex h-screen overflow-hidden" style="display:none">
     <!-- SIDEBAR -->
     <aside id="sidebar"
       class="w-64 flex-shrink-0 bg-gray-900 dark:bg-gray-950 flex flex-col py-6 px-3 overflow-y-auto transition-all duration-200">
@@ -179,12 +258,14 @@
       </nav>
       <div class="px-4 mt-4 pt-4 border-t border-gray-700">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">
-            SM</div>
+          <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">SM</div>
           <div>
             <div class="text-white text-xs font-medium">Suresh Mehta</div>
             <div class="text-gray-400 text-xs">Admin</div>
           </div>
+          <button onclick="doLogout()" title="Logout" class="ml-auto p-1.5 rounded-lg hover:bg-red-900/40 text-gray-500 hover:text-red-400 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          </button>
         </div>
       </div>
     </aside>
@@ -241,8 +322,20 @@
               <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
               <p class="text-sm text-gray-400 mt-0.5">Welcome back, Suresh. Here's what's happening today.</p>
             </div>
-            <div class="flex gap-2">
-              <button class="btn-ghost text-xs">📅 March 2026</button>
+            <div class="flex gap-2 relative">
+              <div class="relative">
+                <button onclick="toggleMonthPicker()" id="monthPickerBtn" class="btn-ghost text-xs flex items-center gap-2">📅 March 2026 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                <div id="monthPickerDropdown" class="hidden absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                  <div class="py-1">
+                    <button onclick="selectMonth('Oct 2025', [110, 145, 160, 130, 155, 120], 210, 150)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Oct 2025</button>
+                    <button onclick="selectMonth('Nov 2025', [120, 155, 170, 140, 165, 130], 225, 165)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Nov 2025</button>
+                    <button onclick="selectMonth('Dec 2025', [130, 165, 180, 150, 175, 140], 235, 175)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Dec 2025</button>
+                    <button onclick="selectMonth('Jan 2026', [140, 175, 190, 160, 185, 150], 240, 180)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Jan 2026</button>
+                    <button onclick="selectMonth('Feb 2026', [150, 185, 200, 170, 195, 165], 245, 185)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Feb 2026</button>
+                    <button onclick="selectMonth('Mar 2026', [110, 145, 160, 130, 155, 180], 248, 186)" class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-700">Mar 2026</button>
+                  </div>
+                </div>
+              </div>
               <button class="btn-primary text-xs" onclick="openModal()">+ Add Customer</button>
             </div>
           </div>
@@ -679,7 +772,8 @@
       const isDark = document.documentElement.classList.contains('dark');
       const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
       const textColor = isDark ? '#9ca3af' : '#6b7280';
-      new Chart(document.getElementById('revenueChart'), {
+      if(window.myRevenueChart) window.myRevenueChart.destroy();
+      window.myRevenueChart = new Chart(document.getElementById('revenueChart'), {
         type: 'bar',
         data: {
           labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
@@ -690,7 +784,8 @@
         },
         options: { plugins: { legend: { labels: { color: textColor, font: { size: 11 } } } }, scales: { y: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Revenue (₹K)', color: textColor } }, y1: { position: 'right', grid: { display: false }, ticks: { color: textColor } } } }
       });
-      new Chart(document.getElementById('amcChart'), {
+      if(window.myAmcChart) window.myAmcChart.destroy();
+      window.myAmcChart = new Chart(document.getElementById('amcChart'), {
         type: 'doughnut',
         data: { labels: ['Active', 'Expired', 'No AMC'], datasets: [{ data: [186, 38, 24], backgroundColor: ['#6366f1', '#f87171', '#d1d5db'], borderWidth: 0, hoverOffset: 4 }] },
         options: { cutout: '72%', plugins: { legend: { display: false } } }
@@ -798,6 +893,56 @@
 
 <script>
 (function(){
+// ── AUTH LOGIC ───────────────────────────────────────────
+window.doLogin = function() {
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  const card = document.getElementById('loginCard');
+  
+  if(email === 'admin@aquacare.in' && pass === 'aqua@1234') {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'flex';
+    err.classList.add('hidden');
+    showToast('Welcome back, Suresh!', 'success');
+  } else {
+    err.classList.remove('hidden');
+    card.style.animation = 'none';
+    void card.offsetWidth; // trigger reflow
+    card.style.animation = 'loginShake 0.4s ease';
+  }
+};
+
+window.doLogout = function() {
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('loginPassword').value = '';
+  showToast('Logged out successfully', 'info');
+};
+
+// ── MONTH PICKER ─────────────────────────────────────────
+window.toggleMonthPicker = function() {
+  document.getElementById('monthPickerDropdown').classList.toggle('hidden');
+};
+
+window.selectMonth = function(label, revData, totalCust, activeAmc) {
+  document.getElementById('monthPickerBtn').innerHTML = `📅 ${label} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`;
+  document.getElementById('monthPickerDropdown').classList.add('hidden');
+  
+  // Update Chart
+  if(window.myRevenueChart) {
+    window.myRevenueChart.data.datasets[0].data = revData;
+    window.myRevenueChart.update();
+  }
+  
+  // Update KPIs (Simulation)
+  const kpis = document.querySelectorAll('#page-dashboard .card .text-2xl.font-bold');
+  if(kpis[0]) kpis[0].textContent = totalCust;
+  if(kpis[1]) kpis[1].textContent = activeAmc;
+  
+  showToast(`Data updated for ${label}`, 'info');
+};
+
 // ── TOAST ─────────────────────────────────────────────────
 window.showToast=function(msg,type){
   const c={success:'bg-green-500',error:'bg-red-500',info:'bg-blue-500'};
